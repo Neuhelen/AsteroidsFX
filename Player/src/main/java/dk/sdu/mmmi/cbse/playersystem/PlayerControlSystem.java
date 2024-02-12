@@ -14,7 +14,6 @@ import static java.util.stream.Collectors.toList;
 
 
 public class PlayerControlSystem implements IEntityProcessingService {
-
     @Override
     public void process(GameData gameData, World world) {
             
@@ -47,12 +46,25 @@ public class PlayerControlSystem implements IEntityProcessingService {
         if (player.getY() > gameData.getDisplayHeight()) {
             player.setY(gameData.getDisplayHeight()-1);
         }
-            
-                                        
+
+            if (gameData.getKeys().isPressed(GameKeys.SPACE)) {
+                System.out.println("Space is pressed.");
+                shootBullet(player, world, gameData);
+            }
         }
     }
 
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private void shootBullet(Entity player, World world, GameData gameData) {
+        // Iterate over loaded BulletSPIs to create a bullet
+        for (BulletSPI bulletSPI : getBulletSPIs()) {
+            Entity bullet = bulletSPI.createBullet(player, gameData);
+            if (bullet != null) {
+                world.addEntity(bullet);
+            }
+        }
     }
 }

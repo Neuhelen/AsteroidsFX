@@ -31,7 +31,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         bullet.setRotation(shooter.getRotation()); // Set initial rotation to the shooter's rotation
 
         // Set initial bullet velocity based on the shooter's rotation
-        double bulletSpeed = 300; // Adjust the speed as needed
+        double bulletSpeed = 1; // Adjust the speed as needed
         double bulletDirectionX = Math.cos(Math.toRadians(shooter.getRotation()));
         double bulletDirectionY = Math.sin(Math.toRadians(shooter.getRotation()));
         bullet.setVelocity(bulletSpeed * bulletDirectionX, bulletSpeed * bulletDirectionY);
