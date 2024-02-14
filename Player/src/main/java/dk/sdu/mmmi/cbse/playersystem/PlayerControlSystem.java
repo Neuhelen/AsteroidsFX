@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
+import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -8,6 +9,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toList;
@@ -31,40 +33,31 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setY(player.getY() + changeY);
             }
             
-        if (player.getX() < 0) {
-            player.setX(1);
-        }
+            if (player.getX() < 0) {
+                player.setX(1);
+            }
 
-        if (player.getX() > gameData.getDisplayWidth()) {
-            player.setX(gameData.getDisplayWidth()-1);
-        }
+            if (player.getX() > gameData.getDisplayWidth()) {
+                player.setX(gameData.getDisplayWidth()-1);
+            }
 
-        if (player.getY() < 0) {
-            player.setY(1);
-        }
+            if (player.getY() < 0) {
+                player.setY(1);
+            }
 
-        if (player.getY() > gameData.getDisplayHeight()) {
-            player.setY(gameData.getDisplayHeight()-1);
-        }
+            if (player.getY() > gameData.getDisplayHeight()) {
+                player.setY(gameData.getDisplayHeight()-1);
+            }
 
-            if (gameData.getKeys().isPressed(GameKeys.SPACE)) {
-                System.out.println("Space is pressed.");
-                shootBullet(player, world, gameData);
+            if (gameData.getKeys().isDown(GameKeys.SPACE)) {
+                for (BulletSPI bullet : getBulletSPIs()) {
+                    world.addEntity(bullet.createBullet(player, gameData));
+                }
             }
         }
     }
 
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
-    }
-
-    private void shootBullet(Entity player, World world, GameData gameData) {
-        // Iterate over loaded BulletSPIs to create a bullet
-        for (BulletSPI bulletSPI : getBulletSPIs()) {
-            Entity bullet = bulletSPI.createBullet(player, gameData);
-            if (bullet != null) {
-                world.addEntity(bullet);
-            }
-        }
     }
 }

@@ -122,15 +122,15 @@ public class Main extends Application {
 
             if (polygon == null) {
                 // If the polygon doesn't exist (for example, newly created entity), create and add it
-                System.out.println("polygon is null.");
+                //System.out.println("polygon is null.");
                 polygon = new Polygon(entity.getPolygonCoordinates());
-                System.out.println(polygon);
+                //System.out.println(polygon);
 
                 polygons.put(entity, polygon);
                 gameWindow.getChildren().add(polygon);
             } else {
-                System.out.println("polygon is not null.");
-                System.out.println(polygon);
+                //System.out.println("polygon is not null.");
+                //System.out.println(polygon);
             }
 
             // Update the position and rotation of the polygon based on the entity's data
