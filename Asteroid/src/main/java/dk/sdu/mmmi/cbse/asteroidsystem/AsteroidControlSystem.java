@@ -20,6 +20,7 @@ public class AsteroidControlSystem implements IEntityProcessingService {
         if (System.nanoTime() - lastAsteroidSpawn > asteroidCooldown) {
             System.out.println("process is running. Spawning should occur.");
             Asteroid asteroid = new Asteroid();
+            asteroid.setRotation(random.nextInt(360));
             asteroid.setPolygonCoordinates(-40,-40,80,0,-40,40);
             asteroidPlugin.createAsteroid(gameData);
             world.addEntity(asteroid);
