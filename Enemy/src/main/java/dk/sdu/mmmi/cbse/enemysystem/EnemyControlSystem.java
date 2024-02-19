@@ -17,9 +17,22 @@ public class EnemyControlSystem implements IEntityProcessingService {
     private long lastShotTime = System.nanoTime();
     private long shotCooldown = 250000L;
 
+    EnemyPlugin enemyPlugin = new EnemyPlugin();
+    private long lastEnemySpawn = System.nanoTime();
+    private long enemyCooldown = 500000L;
+
 
     @Override
     public void process(GameData gameData, World world) {
+        if (System.nanoTime() - lastEnemySpawn > enemyCooldown) {
+            Enemy enemy = new Enemy();
+            enemy.setPolygonCoordinates(-10,-10,20,0,-10,10);
+            enemyPlugin.createEnemyShip(gameData);
+            world.addEntity(enemy);
+            lastEnemySpawn = System.nanoTime(); // Reset the timer
+        }
+
+
         for (Entity enemy : world.getEntities(Enemy.class)) {
 
             moveRandomly(enemy);
@@ -33,22 +46,22 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             if (enemy.getX() < 0) {
                 enemy.setX(1);
-                enemy.setRotation(enemy.getRotation() + random.nextInt(91));
+                enemy.setRotation(enemy.getRotation() + random.nextInt(91) + 90);
             }
 
             if (enemy.getX() > gameData.getDisplayWidth()) {
                 enemy.setX(gameData.getDisplayWidth()-1);
-                enemy.setRotation(enemy.getRotation() + random.nextInt(91));
+                enemy.setRotation(enemy.getRotation() + random.nextInt(91) + 90);
             }
 
             if (enemy.getY() < 0) {
                 enemy.setY(1);
-                enemy.setRotation(enemy.getRotation() + random.nextInt(91));
+                enemy.setRotation(enemy.getRotation() + random.nextInt(91) + 90);
             }
 
             if (enemy.getY() > gameData.getDisplayHeight()) {
                 enemy.setY(gameData.getDisplayHeight()-1);
-                enemy.setRotation(enemy.getRotation() + random.nextInt(91));
+                enemy.setRotation(enemy.getRotation() + random.nextInt(91) + 90);
             }
         }
     }
