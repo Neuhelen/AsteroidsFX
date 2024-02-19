@@ -29,7 +29,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             enemy.setPolygonCoordinates(-10,-10,20,0,-10,10);
             enemyPlugin.createEnemyShip(gameData);
             world.addEntity(enemy);
-            lastEnemySpawn = System.nanoTime(); // Reset the timer
+            lastEnemySpawn = System.nanoTime();
         }
 
 
