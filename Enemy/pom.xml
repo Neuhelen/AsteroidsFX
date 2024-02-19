@@ -6,9 +6,9 @@
         <artifactId>asteroids.jpms</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>Player</artifactId>
+    <artifactId>Enemy</artifactId>
     <packaging>jar</packaging>
-    <name>Player</name>
+    <name>Enemy</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
