@@ -23,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
 public class Main extends Application {
 
@@ -137,6 +138,8 @@ public class Main extends Application {
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
+
+            polygon.setFill(Color.valueOf(entity.getColor())); // Assuming javafx.scene.paint.Color is used
         }
     }
 

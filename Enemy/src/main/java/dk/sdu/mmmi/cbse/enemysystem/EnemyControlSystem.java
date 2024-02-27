@@ -27,6 +27,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
         if (System.nanoTime() - lastEnemySpawn > enemyCooldown) {
             Enemy enemy = new Enemy();
             enemy.setPolygonCoordinates(-10,-10,20,0,-10,10);
+            enemy.setColor("RED");
             enemyPlugin.createEnemyShip(gameData);
             world.addEntity(enemy);
             lastEnemySpawn = System.nanoTime();

@@ -48,6 +48,8 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
         bullet.setPolygonCoordinates(-2,2,2,2,2,-2,-2,-2);
 
+        bullet.setColor("ORANGE");
+
         return bullet;
     }
     /*

@@ -23,6 +23,7 @@ public class PlayerPlugin implements IGamePluginService {
 
         Entity playerShip = new Player();
         playerShip.setPolygonCoordinates(-5,-5,10,0,-5,5);
+        playerShip.setColor("BROWN");
         playerShip.setX(gameData.getDisplayHeight()/2);
         playerShip.setY(gameData.getDisplayWidth()/2);
         return playerShip;

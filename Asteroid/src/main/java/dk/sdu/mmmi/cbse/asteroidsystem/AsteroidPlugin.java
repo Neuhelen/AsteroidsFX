@@ -21,6 +21,7 @@ public class AsteroidPlugin implements IGamePluginService {
     public Entity createAsteroid(GameData gameData) {
         Entity asteroid = new Asteroid();
         asteroid.setPolygonCoordinates(-40,-40,80,0,-40,40);
+        asteroid.setColor("RED");
 
         Random random = new Random();
         int spawnLocation = random.nextInt(4);

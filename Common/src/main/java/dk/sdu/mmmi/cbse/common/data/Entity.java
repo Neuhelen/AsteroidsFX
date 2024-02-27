@@ -14,6 +14,8 @@ public class Entity implements Serializable {
     private double velocityX;
     private double velocityY;
 
+    private String color;
+
     public String getID() {
         return ID.toString();
     }
@@ -65,5 +67,13 @@ public class Entity implements Serializable {
 
     public double getVelocityY() {
         return velocityY;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
