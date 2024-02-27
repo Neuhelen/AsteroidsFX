@@ -117,9 +117,16 @@ public class Main extends Application {
     }
 
     private void draw() {
-
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
+            if(!entity.isValid()) {
+                world.removeEntity(entity);
+                gameWindow.getChildren().remove(polygon);
+                if(polygon != null) {
+                    polygons.remove(polygon);
+                }
+                continue;
+            }
 
             if (polygon == null) {
                 polygon = new Polygon(entity.getPolygonCoordinates());
@@ -131,11 +138,7 @@ public class Main extends Application {
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
 
-            if (entity.isValid()) {
-                polygon.setFill(Color.valueOf(entity.getColor()));
-            } else {
-                polygon.setFill(Color.WHITE);
-            }
+            polygon.setFill(Color.valueOf(entity.getColor()));
         }
     }
 

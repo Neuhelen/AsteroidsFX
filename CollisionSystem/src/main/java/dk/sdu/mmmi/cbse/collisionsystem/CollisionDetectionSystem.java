@@ -98,7 +98,6 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
             world.removeEntity(player);
         }
         if (otherEntity instanceof Bullet){
-            world.removeEntity(otherEntity);
             otherEntity.setValid(false);
         }
     }
