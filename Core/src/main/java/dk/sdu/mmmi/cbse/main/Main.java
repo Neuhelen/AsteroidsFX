@@ -122,24 +122,20 @@ public class Main extends Application {
             Polygon polygon = polygons.get(entity);
 
             if (polygon == null) {
-                // If the polygon doesn't exist (for example, newly created entity), create and add it
-                //System.out.println("polygon is null.");
                 polygon = new Polygon(entity.getPolygonCoordinates());
-                //System.out.println(polygon);
-
                 polygons.put(entity, polygon);
                 gameWindow.getChildren().add(polygon);
-            } else {
-                //System.out.println("polygon is not null.");
-                //System.out.println(polygon);
             }
 
-            // Update the position and rotation of the polygon based on the entity's data
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
 
-            polygon.setFill(Color.valueOf(entity.getColor())); // Assuming javafx.scene.paint.Color is used
+            if (entity.isValid()) {
+                polygon.setFill(Color.valueOf(entity.getColor()));
+            } else {
+                polygon.setFill(Color.WHITE);
+            }
         }
     }
 

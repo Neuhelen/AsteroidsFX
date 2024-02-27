@@ -14,16 +14,18 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities()) {
-            if (entity instanceof Asteroid) {
-                checkCollisions(entity, world);
-            }
+            if (entity.isValid()) {
+                if (entity instanceof Asteroid) {
+                    checkCollisions(entity, world);
+                }
 
-            if (entity instanceof Enemy) {
-                checkCollisions(entity, world);
-            }
+                if (entity instanceof Enemy) {
+                    checkCollisions(entity, world);
+                }
 
-            if (entity instanceof Player) {
-                checkPlayerCollisions((Player) entity, world);
+                if (entity instanceof Player) {
+                    checkPlayerCollisions((Player) entity, world);
+                }
             }
         }
     }
@@ -32,7 +34,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
 
     private void checkCollisions(Entity entity, World world) {
         for (Entity otherEntity : world.getEntities()) {
-            if (entity.equals(otherEntity)) {
+            if (!otherEntity.isValid() || entity.equals(otherEntity)) {
                 continue;
             }
 
@@ -48,7 +50,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
         // Loop through all entities in the world
         for (Entity otherEntity : world.getEntities()) {
             // Skip checking collision with itself
-            if (player.equals(otherEntity)) {
+            if (!player.isValid() || player.equals(otherEntity)) {
                 continue;
             }
 
@@ -82,7 +84,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     }
 
     private void handleCollision(Entity entity, Entity otherEntity, World world) {
-        if(!(otherEntity instanceof Bullet)) {
+        if(!otherEntity.isValid() || !(otherEntity instanceof Bullet)) {
             entity.setRotation(calculateRotation(entity, otherEntity));
         }
     }
@@ -94,6 +96,10 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
             player.setHealth(player.getHealth() - 1);
         } else {
             world.removeEntity(player);
+        }
+        if (otherEntity instanceof Bullet){
+            world.removeEntity(otherEntity);
+            otherEntity.setValid(false);
         }
     }
 
@@ -108,6 +114,10 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     }
 
     private boolean isPointInsidePolygon(double x, double y, double[] polygon, Entity entity) {
+        if (!entity.isValid()) {
+            return false; // Skip checking invalid entities
+        }
+
         int count = 0;
         int numPoints = polygon.length / 2;
 

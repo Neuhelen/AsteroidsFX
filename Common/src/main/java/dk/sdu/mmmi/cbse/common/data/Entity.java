@@ -13,8 +13,8 @@ public class Entity implements Serializable {
     private double rotation;
     private double velocityX;
     private double velocityY;
-
     private String color;
+    private boolean isValid = true;
 
     public String getID() {
         return ID.toString();
@@ -26,7 +26,11 @@ public class Entity implements Serializable {
     }
 
     public double[] getPolygonCoordinates() {
-        return polygonCoordinates;
+        if (isValid) {
+            return polygonCoordinates;
+        } else {
+            return new double[0];
+        }
     }
        
 
@@ -75,5 +79,13 @@ public class Entity implements Serializable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
     }
 }

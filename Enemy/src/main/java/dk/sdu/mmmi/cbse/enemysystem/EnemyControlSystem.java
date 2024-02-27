@@ -24,7 +24,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         if ((System.nanoTime() - lastEnemySpawn) > enemyCooldown) {
-            System.out.println("Spawn time!");
             Enemy enemy = new Enemy();
             enemy.setPolygonCoordinates(-10,-10,20,0,-10,10);
             enemy.setColor("RED");
@@ -39,18 +38,14 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             moveRandomly(enemy);
 
-            System.out.println("Before shooting: " + enemy.getLastShotTime());
             if (enemy.getLastShotTime() >= shotCooldown) {
                 for (BulletSPI bullet : getBulletSPIs()) {
                     world.addEntity(bullet.createBullet(enemy, gameData));
                 }
 
                 enemy.setLastShotTime(0);
-
-                System.out.println("After shooting: " + enemy.getLastShotTime());
             } else {
                 enemy.setLastShotTime(enemy.getLastShotTime() + 1);
-                System.out.println("No shooting: " + (enemy.getLastShotTime() + 1));
             }
 
             if (enemy.getX() < 0) {
