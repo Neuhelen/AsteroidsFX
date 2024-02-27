@@ -8,13 +8,15 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import java.util.Collection;
 import java.util.Random;
 import java.util.ServiceLoader;
+import java.util.Map;
+import java.util.HashMap;
 
 import static java.util.stream.Collectors.toList;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
     private Random random = new Random();
-    private long lastShotTime = System.nanoTime();
+    private Map<Entity, Long> lastShotTimes = new HashMap<>();
     private long shotCooldown = 250000L;
 
     EnemyPlugin enemyPlugin = new EnemyPlugin();
@@ -38,11 +40,12 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             moveRandomly(enemy);
 
+            long lastShotTime = lastShotTimes.getOrDefault(enemy, 0L);
             if (System.nanoTime() - lastShotTime > shotCooldown) {
                 for (BulletSPI bullet : getBulletSPIs()) {
                     world.addEntity(bullet.createBullet(enemy, gameData));
                 }
-                lastShotTime = System.nanoTime();
+                lastShotTimes.put(enemy, System.nanoTime());
             }
 
             if (enemy.getX() < 0) {
