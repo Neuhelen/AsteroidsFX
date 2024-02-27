@@ -8,16 +8,13 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import java.util.Collection;
 import java.util.Random;
 import java.util.ServiceLoader;
-import java.util.Map;
-import java.util.HashMap;
 
 import static java.util.stream.Collectors.toList;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
     private Random random = new Random();
-    private Map<Entity, Long> lastShotTimes = new HashMap<>();
-    private long shotCooldown = 250000L;
+    private int shotCooldown = 50;
 
     EnemyPlugin enemyPlugin = new EnemyPlugin();
     private long lastEnemySpawn = System.nanoTime();
@@ -26,7 +23,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        if (System.nanoTime() - lastEnemySpawn > enemyCooldown) {
+        if ((System.nanoTime() - lastEnemySpawn) > enemyCooldown) {
+            System.out.println("Spawn time!");
             Enemy enemy = new Enemy();
             enemy.setPolygonCoordinates(-10,-10,20,0,-10,10);
             enemy.setColor("RED");
@@ -35,17 +33,24 @@ public class EnemyControlSystem implements IEntityProcessingService {
             lastEnemySpawn = System.nanoTime();
         }
 
+        for (Entity entity : world.getEntities(Enemy.class)) {
 
-        for (Entity enemy : world.getEntities(Enemy.class)) {
+            Enemy enemy = (Enemy) entity;
 
             moveRandomly(enemy);
 
-            long lastShotTime = lastShotTimes.getOrDefault(enemy, 0L);
-            if (System.nanoTime() - lastShotTime > shotCooldown) {
+            System.out.println("Before shooting: " + enemy.getLastShotTime());
+            if (enemy.getLastShotTime() >= shotCooldown) {
                 for (BulletSPI bullet : getBulletSPIs()) {
                     world.addEntity(bullet.createBullet(enemy, gameData));
                 }
-                lastShotTimes.put(enemy, System.nanoTime());
+
+                enemy.setLastShotTime(0);
+
+                System.out.println("After shooting: " + enemy.getLastShotTime());
+            } else {
+                enemy.setLastShotTime(enemy.getLastShotTime() + 1);
+                System.out.println("No shooting: " + (enemy.getLastShotTime() + 1));
             }
 
             if (enemy.getX() < 0) {
