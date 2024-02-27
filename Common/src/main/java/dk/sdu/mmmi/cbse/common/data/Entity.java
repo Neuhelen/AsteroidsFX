@@ -14,7 +14,7 @@ public class Entity implements Serializable {
     private double velocityX;
     private double velocityY;
     private String color;
-    private boolean isValid = true;
+    private int health = 5;
 
     public String getID() {
         return ID.toString();
@@ -25,13 +25,7 @@ public class Entity implements Serializable {
         this.polygonCoordinates = coordinates;
     }
 
-    public double[] getPolygonCoordinates() {
-        if (isValid) {
-            return polygonCoordinates;
-        } else {
-            return new double[0];
-        }
-    }
+    public double[] getPolygonCoordinates() { return polygonCoordinates; }
        
 
     public void setX(double x) {
@@ -81,11 +75,11 @@ public class Entity implements Serializable {
         this.color = color;
     }
 
-    public boolean isValid() {
-        return isValid;
+    public int getHealth() {
+        return health;
     }
 
-    public void setValid(boolean valid) {
-        isValid = valid;
+    public void setHealth(int health) {
+        this.health = health;
     }
 }

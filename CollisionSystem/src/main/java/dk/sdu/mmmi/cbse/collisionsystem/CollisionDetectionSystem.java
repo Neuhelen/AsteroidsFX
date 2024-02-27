@@ -14,7 +14,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities()) {
-            if (entity.isValid()) {
+            if (entity.getHealth() != 0) {
                 if (entity instanceof Asteroid) {
                     checkCollisions(entity, world);
                 }
@@ -34,7 +34,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
 
     private void checkCollisions(Entity entity, World world) {
         for (Entity otherEntity : world.getEntities()) {
-            if (!otherEntity.isValid() || entity.equals(otherEntity)) {
+            if (entity.getHealth() == 0 || entity.equals(otherEntity)) {
                 continue;
             }
 
@@ -50,7 +50,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
         // Loop through all entities in the world
         for (Entity otherEntity : world.getEntities()) {
             // Skip checking collision with itself
-            if (!player.isValid() || player.equals(otherEntity)) {
+            if (player.getHealth() == 0 || player.equals(otherEntity)) {
                 continue;
             }
 
@@ -84,13 +84,12 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     }
 
     private void handleCollision(Entity entity, Entity otherEntity, World world) {
-        if(!otherEntity.isValid() || !(otherEntity instanceof Bullet)) {
+        if(otherEntity.getHealth() != 0 && !(otherEntity instanceof Bullet)) {
             entity.setRotation(calculateRotation(entity, otherEntity));
         }
     }
 
     private void handlePlayerCollision(Player player, Entity otherEntity, World world) {
-        System.out.println(player.getHealth());
         if(player.getHealth() != 1) {
             player.setRotation(calculateRotation(player, otherEntity));
             player.setHealth(player.getHealth() - 1);
@@ -98,7 +97,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
             world.removeEntity(player);
         }
         if (otherEntity instanceof Bullet){
-            otherEntity.setValid(false);
+            otherEntity.setHealth(0);
         }
     }
 
@@ -113,7 +112,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     }
 
     private boolean isPointInsidePolygon(double x, double y, double[] polygon, Entity entity) {
-        if (!entity.isValid()) {
+        if (entity.getHealth() == 0) {
             return false; // Skip checking invalid entities
         }
 

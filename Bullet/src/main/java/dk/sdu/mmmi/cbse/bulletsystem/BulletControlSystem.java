@@ -36,6 +36,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     @Override
     public Entity createBullet(Entity shooter, GameData gameData) {
         Entity bullet = new Bullet();
+        bullet.setHealth(1);
 
         //This part sets the initial position to the shooter's position.
         bullet.setX(shooter.getX());

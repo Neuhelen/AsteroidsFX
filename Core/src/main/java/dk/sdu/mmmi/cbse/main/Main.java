@@ -119,7 +119,7 @@ public class Main extends Application {
     private void draw() {
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
-            if(!entity.isValid()) {
+            if(entity.getHealth() == 0) {
                 world.removeEntity(entity);
                 gameWindow.getChildren().remove(polygon);
                 if(polygon != null) {
