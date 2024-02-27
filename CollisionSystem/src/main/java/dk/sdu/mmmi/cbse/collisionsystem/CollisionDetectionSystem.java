@@ -6,44 +6,40 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.asteroidsystem.Asteroid;
 import dk.sdu.mmmi.cbse.playersystem.Player;
-
-import java.util.Random;
+import dk.sdu.mmmi.cbse.enemysystem.Enemy;
+import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 
 public class CollisionDetectionSystem implements IEntityProcessingService {
-    Random random = new Random();
-    double collisionRadius = 50;
 
     @Override
     public void process(GameData gameData, World world) {
-        // Loop through all entities in the world
-        for (Entity entity : world.getEntities(Asteroid.class)) {
-            // Check for collisions with asteroids
+        for (Entity entity : world.getEntities()) {
             if (entity instanceof Asteroid) {
-                checkAsteroidCollisions((Asteroid) entity, world);
+                checkCollisions(entity, world);
             }
 
-            // Add additional checks for other entity types (player, enemy, bullets) as needed
-            // ...
+            if (entity instanceof Enemy) {
+                checkCollisions(entity, world);
+            }
 
-            // Example: Check collisions with player
             if (entity instanceof Player) {
                 checkPlayerCollisions((Player) entity, world);
             }
         }
     }
 
-    private void checkAsteroidCollisions(Asteroid asteroid, World world) {
-        // Loop through all entities in the world
+
+
+    private void checkCollisions(Entity entity, World world) {
         for (Entity otherEntity : world.getEntities()) {
-            // Skip checking collision with itself
-            if (asteroid.equals(otherEntity)) {
+            if (entity.equals(otherEntity)) {
                 continue;
             }
 
             // Check if the entities have collided using Pythagorean theorem
-            if (checkCollision(asteroid, otherEntity)) {
+            if (checkCollision(entity, otherEntity)) {
                 // Handle the collision (destroy the entities, split asteroids, etc.)
-                handleAsteroidCollision(asteroid, otherEntity, world);
+                handleCollision(entity, otherEntity, world);
             }
         }
     }
@@ -76,11 +72,8 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
                 double x2 = polygon2[j] + entity2.getX();
                 double y2 = polygon2[j + 1] + entity2.getY();
 
-                // Check for collision using Pythagorean theorem
-                double distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-
                 // Adjust the threshold based on your game's requirements
-                if (distance < collisionRadius) {
+                if (isPointInsidePolygon(x1, y1, polygon2, entity2) || isPointInsidePolygon(x2, y2, polygon1, entity1)) {
                     return true; // Collision detected
                 }
             }
@@ -88,19 +81,47 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
         return false; // No collision
     }
 
-    private void handleAsteroidCollision(Asteroid asteroid, Entity otherEntity, World world) {
-        if(!(otherEntity instanceof Player)) {
-            asteroid.setRotation(asteroid.getRotation() - random.nextInt(180) + 90);
-            otherEntity.setRotation(otherEntity.getRotation() - random.nextInt(180) + 90);
+    private void handleCollision(Entity entity, Entity otherEntity, World world) {
+        if(!(otherEntity instanceof Bullet)) {
+            entity.setRotation(calculateRotation(entity, otherEntity));
         }
     }
 
     private void handlePlayerCollision(Player player, Entity otherEntity, World world) {
+        System.out.println(player.getHealth());
         if(player.getHealth() != 1) {
-            player.setRotation(player.getRotation() - random.nextInt(180) + 90);
-            otherEntity.setRotation(otherEntity.getRotation() - random.nextInt(180) + 90);
+            player.setRotation(calculateRotation(player, otherEntity));
+            player.setHealth(player.getHealth() - 1);
         } else {
             world.removeEntity(player);
         }
+    }
+
+    private double calculateRotation(Entity entity1, Entity entity2) {
+        // Calculate the angle between the centers of the two entities
+        double angle = Math.atan2(entity2.getY() - entity1.getY(), entity2.getX() - entity1.getX());
+
+        // Calculate the new rotation as the reflection of the current rotation
+        double newRotation = 2 * angle - entity1.getRotation();
+
+        return newRotation;
+    }
+
+    private boolean isPointInsidePolygon(double x, double y, double[] polygon, Entity entity) {
+        int count = 0;
+        int numPoints = polygon.length / 2;
+
+        for (int i = 0, j = numPoints - 1; i < numPoints; j = i++) {
+            double xi = polygon[i * 2] + entity.getX();
+            double yi = polygon[i * 2 + 1] + entity.getY();
+            double xj = polygon[j * 2] + entity.getX();
+            double yj = polygon[j * 2 + 1] + entity.getY();
+
+            if ((yi > y) != (yj > y) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
+                count++;
+            }
+        }
+
+        return count % 2 == 1;
     }
 }
