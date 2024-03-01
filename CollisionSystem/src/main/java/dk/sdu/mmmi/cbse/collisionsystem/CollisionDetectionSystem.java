@@ -86,17 +86,19 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     private void handleCollision(Entity entity, Entity otherEntity, World world) {
         if(otherEntity.getHealth() != 0 && !(otherEntity instanceof Bullet)) {
             entity.setRotation(calculateRotation(entity, otherEntity));
+            entity.setHealth(entity.getHealth() - 1);
+        } else if (otherEntity instanceof Bullet && otherEntity.getColor() != entity.getColor()){
+            entity.setHealth(entity.getHealth() - 1);
         }
     }
 
     private void handlePlayerCollision(Player player, Entity otherEntity, World world) {
-        if(player.getHealth() != 1) {
+        if(player.getHealth() != 0 && otherEntity.getColor() != player.getColor()) {
             player.setRotation(calculateRotation(player, otherEntity));
+            System.out.println(player.getHealth());
             player.setHealth(player.getHealth() - 1);
-        } else {
-            world.removeEntity(player);
         }
-        if (otherEntity instanceof Bullet){
+        if (otherEntity instanceof Bullet && otherEntity.getColor() != player.getColor()){
             otherEntity.setHealth(0);
         }
     }
