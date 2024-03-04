@@ -18,15 +18,13 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     EnemyPlugin enemyPlugin = new EnemyPlugin();
     private long lastEnemySpawn = System.nanoTime();
-    private long enemyCooldown = 500000L;
+    private long enemyCooldown = 250000L;
 
 
     @Override
     public void process(GameData gameData, World world) {
         if ((System.nanoTime() - lastEnemySpawn) > enemyCooldown) {
-            Enemy enemy = new Enemy();
-            enemy.setPolygonCoordinates(-10,-10,20,0,-10,10);
-            enemy.setColor("RED");
+            Entity enemy = enemyPlugin.createEnemyShip(gameData);
             enemyPlugin.createEnemyShip(gameData);
             world.addEntity(enemy);
             lastEnemySpawn = System.nanoTime();

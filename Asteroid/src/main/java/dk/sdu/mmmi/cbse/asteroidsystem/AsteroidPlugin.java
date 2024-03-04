@@ -10,6 +10,7 @@ import java.util.Random;
 public class AsteroidPlugin implements IGamePluginService {
 
     private Entity asteroid;
+    Random random = new Random();
 
     @Override
     public void start(GameData gameData, World world) {
@@ -20,10 +21,9 @@ public class AsteroidPlugin implements IGamePluginService {
 
     public Entity createAsteroid(GameData gameData) {
         Entity asteroid = new Asteroid();
-        asteroid.setPolygonCoordinates(-40,-40,80,0,-40,40);
+        asteroid.setPolygonCoordinates(createShape(random.nextInt(50)));
         asteroid.setColor("RED");
 
-        Random random = new Random();
         int spawnLocation = random.nextInt(4);
 
         switch (spawnLocation) {
@@ -52,6 +52,22 @@ public class AsteroidPlugin implements IGamePluginService {
         }
 
         return asteroid;
+    }
+
+    public double[] createShape (int size) {
+        Random randSize = new Random();
+        double big = randSize.nextDouble((size/2),size);
+        double small = randSize.nextDouble(0, size/2);
+        return new double[]{
+                big,-small,
+                small, -big,
+                -small, -big,
+                -big,-small,
+                -big,small,
+                -small, big,
+                small, big,
+                big,small
+        };
     }
 
     @Override

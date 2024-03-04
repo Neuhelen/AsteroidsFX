@@ -10,6 +10,7 @@ import java.util.Random;
 public class EnemyPlugin implements IGamePluginService {
 
     private Entity enemy;
+    Random random = new Random();
 
     @Override
     public void start(GameData gameData, World world) {
@@ -23,7 +24,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemyShip.setPolygonCoordinates(-10,-10,20,0,-10,10);
         enemyShip.setColor("RED");
 
-        Random random = new Random();
+
         int spawnLocation = random.nextInt(4);
 
         switch (spawnLocation) {

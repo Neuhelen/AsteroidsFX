@@ -12,16 +12,13 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
     AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
     private long lastAsteroidSpawn = System.nanoTime();
-    private long asteroidCooldown = 500000L;
+    private long asteroidCooldown = 250000L;
 
 
     @Override
     public void process(GameData gameData, World world) {
         if (System.nanoTime() - lastAsteroidSpawn > asteroidCooldown) {
-            Asteroid asteroid = new Asteroid();
-            asteroid.setRotation(random.nextInt(360));
-            asteroid.setPolygonCoordinates(-40,-40,80,0,-40,40);
-            asteroid.setColor("RED");
+            Entity asteroid = asteroidPlugin.createAsteroid(gameData);
             asteroidPlugin.createAsteroid(gameData);
             world.addEntity(asteroid);
             lastAsteroidSpawn = System.nanoTime();
