@@ -4,13 +4,13 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 
 
 public class Asteroid extends Entity {
-    private int size;
+    private double size = 1;
 
-    public int getSize() {
+    public double getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(double size) {
         this.size = size;
     }
 }

@@ -21,7 +21,7 @@ public class AsteroidPlugin implements IGamePluginService {
 
     public Entity createAsteroid(GameData gameData) {
         Entity asteroid = new Asteroid();
-        asteroid.setPolygonCoordinates(createShape(random.nextInt(50)));
+        asteroid.setPolygonCoordinates(createShape(random.nextDouble(1, 50)));
         asteroid.setColor("RED");
 
         int spawnLocation = random.nextInt(4);
@@ -54,10 +54,10 @@ public class AsteroidPlugin implements IGamePluginService {
         return asteroid;
     }
 
-    public double[] createShape (int size) {
+    public double[] createShape (double size) {
         Random randSize = new Random();
         double big = randSize.nextDouble((size/2),size);
-        double small = randSize.nextDouble(0, size/2);
+        double small = randSize.nextDouble(size/2);
         return new double[]{
                 big,-small,
                 small, -big,
@@ -70,17 +70,17 @@ public class AsteroidPlugin implements IGamePluginService {
         };
     }
 
-    private void splitAsteroid(GameData gameData, World world, Entity entity) {
+    public void splitAsteroid(GameData gameData, World world, Entity entity) {
         Asteroid asteroid = (Asteroid) entity;
-        int numberOfSplits = 2; // You can adjust this based on your preference
-        int originalSize = asteroid.getSize();
-        int newSize = originalSize / 2; // Adjust the size based on your splitting preference
+        int numberOfSplits = 2;
+        double originalSize = asteroid.getSize();
+        double newSize = originalSize / 2;
 
         for (int i = 0; i < numberOfSplits; i++) {
             Asteroid smallerAsteroid = (Asteroid) createAsteroid(gameData);
             smallerAsteroid.setSize(newSize);
             smallerAsteroid.setX(asteroid.getX() + i * 10 - 5);
-            smallerAsteroid.setY(asteroid.getY());
+            smallerAsteroid.setY(asteroid.getY() + i * 10 - 5);
             smallerAsteroid.setRotation(asteroid.getRotation() + i * 90 - 45);
             world.addEntity(smallerAsteroid);
         }

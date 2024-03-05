@@ -27,6 +27,11 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
         for (Entity asteroid : world.getEntities(Asteroid.class)) {
 
+            if (asteroid.getHealth() <= 0) {
+                System.out.println("Spawning.");
+                asteroidPlugin.splitAsteroid(gameData, world, asteroid);
+            }
+
             move(asteroid);
 
             if (asteroid.getX() < 0) {
