@@ -70,6 +70,22 @@ public class AsteroidPlugin implements IGamePluginService {
         };
     }
 
+    private void splitAsteroid(GameData gameData, World world, Entity entity) {
+        Asteroid asteroid = (Asteroid) entity;
+        int numberOfSplits = 2; // You can adjust this based on your preference
+        int originalSize = asteroid.getSize();
+        int newSize = originalSize / 2; // Adjust the size based on your splitting preference
+
+        for (int i = 0; i < numberOfSplits; i++) {
+            Asteroid smallerAsteroid = (Asteroid) createAsteroid(gameData);
+            smallerAsteroid.setSize(newSize);
+            smallerAsteroid.setX(asteroid.getX() + i * 10 - 5);
+            smallerAsteroid.setY(asteroid.getY());
+            smallerAsteroid.setRotation(asteroid.getRotation() + i * 90 - 45);
+            world.addEntity(smallerAsteroid);
+        }
+    }
+
     @Override
     public void stop(GameData gameData, World world) {
         // Remove entities
