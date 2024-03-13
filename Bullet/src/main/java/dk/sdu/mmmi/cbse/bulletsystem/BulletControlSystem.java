@@ -14,12 +14,11 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     public void process(GameData gameData, World world) {
 
         for (Entity bullet : world.getEntities(Bullet.class)) {
-            //this part sets the initial bullet velocity based on the shooter's rotation.
+            //This part sets the initial bullet velocity based on the shooter's rotation.
             double bulletDirectionX = Math.cos(Math.toRadians(bullet.getRotation()));
             double bulletDirectionY = Math.sin(Math.toRadians(bullet.getRotation()));
             bullet.setX(bullet.getX() + bulletDirectionX * bullet.getVelocityX());
             bullet.setY(bullet.getY() + bulletDirectionY * bullet.getVelocityY());
-
 
             if (bullet.getX() < 0) {
                 bullet.setHealth(0);
@@ -52,7 +51,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         //This part sets the initial rotation to the shooter's rotation.
         bullet.setRotation(shooter.getRotation());
 
-        bullet.setVelocity(1, 1);
+        bullet.setVelocity(shooter.getVelocityX() * 1.5, shooter.getVelocityY() * 1.5);
 
         bullet.setPolygonCoordinates(-2,2,2,2,2,-2,-2,-2);
 

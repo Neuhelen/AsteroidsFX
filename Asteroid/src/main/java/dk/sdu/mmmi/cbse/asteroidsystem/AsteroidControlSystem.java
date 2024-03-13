@@ -25,6 +25,7 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
             if (asteroid.getHealth() == 0 && asteroid.getSize() > 5) {
                 asteroidPlugin.splitAsteroid(gameData, world, asteroid);
+
             }
 
             move(asteroid);

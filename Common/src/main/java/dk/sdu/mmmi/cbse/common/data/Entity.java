@@ -11,8 +11,8 @@ public class Entity implements Serializable {
     private double x;
     private double y;
     private double rotation;
-    private double velocityX;
-    private double velocityY;
+    private double velocityX = 1;
+    private double velocityY = 1;
     private String color;
     private int health = 5;
     private double size = 1;
