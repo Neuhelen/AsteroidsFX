@@ -14,7 +14,6 @@ public class EnemyPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        // Add entities to the world
         enemy = createEnemyShip(gameData);
         world.addEntity(enemy);
     }
@@ -29,22 +28,18 @@ public class EnemyPlugin implements IGamePluginService {
 
         switch (spawnLocation) {
             case 0:
-                // Spawn on the top side
                 enemyShip.setX(random.nextDouble(0,1) * gameData.getDisplayWidth());
                 enemyShip.setY(gameData.getDisplayHeight());
                 break;
             case 1:
-                // Spawn on the right side
                 enemyShip.setX(gameData.getDisplayWidth());
                 enemyShip.setY(random.nextDouble(0,1) * gameData.getDisplayHeight());
                 break;
             case 2:
-                // Spawn on the bottom side
                 enemyShip.setX(random.nextDouble(0,1) * gameData.getDisplayWidth());
                 enemyShip.setY(0);
                 break;
             case 3:
-                // Spawn on the left side
                 enemyShip.setX(0);
                 enemyShip.setY(random.nextDouble(0,1) * gameData.getDisplayHeight());
                 break;
@@ -57,7 +52,6 @@ public class EnemyPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world) {
-        // Remove entities
         world.removeEntity(enemy);
     }
 }

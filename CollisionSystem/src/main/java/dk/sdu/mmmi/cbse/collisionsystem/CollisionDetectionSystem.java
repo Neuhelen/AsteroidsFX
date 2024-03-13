@@ -21,7 +21,7 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
 
     private void checkCollisions(Entity entity, World world) {
         for (Entity otherEntity : world.getEntities()) {
-            if (otherEntity.getHealth() == 0 || entity.equals(otherEntity)) {
+            if (otherEntity.getHealth() == 0 || entity.equals(otherEntity) || otherEntity.getColor().equals(entity.getColor())) {
                 continue;
             }
 
@@ -52,20 +52,19 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     }
 
     private void handleCollision(Entity entity, Entity otherEntity) {
-        if(otherEntity.getColor() != entity.getColor()) {
-            entity.setHealth(entity.getHealth() - 1);
-        }
-        if (otherEntity.getSize() != 0 && otherEntity.getColor() != entity.getColor()) {
+        entity.setHealth(entity.getHealth() - 1);
+
+        if (otherEntity.getSize() != 0) {
             entity.setRotation(calculateRotation(entity, otherEntity));
+        } else {
+            otherEntity.setHealth(otherEntity.getHealth() - 1);
         }
     }
 
     private double calculateRotation(Entity entity1, Entity entity2) {
         double angle = Math.atan2(entity2.getY() - entity1.getY(), entity2.getX() - entity1.getX());
 
-        double newRotation = 2 * angle - entity1.getRotation();
-
-        return newRotation;
+        return 2 * angle - entity1.getRotation();
     }
 
     private boolean isPointInsidePolygon(double x, double y, double[] polygon, Entity entity) {

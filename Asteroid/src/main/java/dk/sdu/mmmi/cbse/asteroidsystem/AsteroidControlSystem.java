@@ -12,23 +12,18 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
     AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
     private long lastAsteroidSpawn = System.nanoTime();
-    private long asteroidCooldown = 250000L;
-
 
     @Override
     public void process(GameData gameData, World world) {
-        if (System.nanoTime() - lastAsteroidSpawn > asteroidCooldown) {
+        if (System.nanoTime() - lastAsteroidSpawn > 250000L) {
             Entity asteroid = asteroidPlugin.createAsteroid(gameData);
-            asteroidPlugin.createAsteroid(gameData);
             world.addEntity(asteroid);
             lastAsteroidSpawn = System.nanoTime();
         }
 
-
         for (Entity asteroid : world.getEntities(Asteroid.class)) {
 
-            if (asteroid.getHealth() <= 0) {
-                System.out.println("Spawning.");
+            if (asteroid.getHealth() == 0 && asteroid.getSize() > 5) {
                 asteroidPlugin.splitAsteroid(gameData, world, asteroid);
             }
 

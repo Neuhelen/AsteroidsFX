@@ -14,18 +14,15 @@ import static java.util.stream.Collectors.toList;
 public class EnemyControlSystem implements IEntityProcessingService {
 
     private Random random = new Random();
-    private int shotCooldown = 50;
 
     EnemyPlugin enemyPlugin = new EnemyPlugin();
     private long lastEnemySpawn = System.nanoTime();
-    private long enemyCooldown = 250000L;
 
 
     @Override
     public void process(GameData gameData, World world) {
-        if ((System.nanoTime() - lastEnemySpawn) > enemyCooldown) {
+        if ((System.nanoTime() - lastEnemySpawn) > 250000L) {
             Entity enemy = enemyPlugin.createEnemyShip(gameData);
-            enemyPlugin.createEnemyShip(gameData);
             world.addEntity(enemy);
             lastEnemySpawn = System.nanoTime();
         }
@@ -36,7 +33,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             moveRandomly(enemy);
 
-            if (enemy.getLastShotTime() >= shotCooldown) {
+            if (enemy.getLastShotTime() >= 50) {
                 for (BulletSPI bullet : getBulletSPIs()) {
                     world.addEntity(bullet.createBullet(enemy, gameData));
                 }

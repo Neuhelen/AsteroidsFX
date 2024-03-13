@@ -14,15 +14,14 @@ public class AsteroidPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        // Add entities to the world
         asteroid = createAsteroid(gameData);
         world.addEntity(asteroid);
     }
 
     public Entity createAsteroid(GameData gameData) {
         Entity asteroid = new Asteroid();
-        asteroid.setPolygonCoordinates(createShape(random.nextDouble(1, 50)));
-        asteroid.setColor("RED");
+        asteroid.setPolygonCoordinates(createShape(random.nextDouble(10, 50)));
+        asteroid.setColor("GREY");
 
         int spawnLocation = random.nextInt(4);
 
@@ -88,7 +87,6 @@ public class AsteroidPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world) {
-        // Remove entities
         world.removeEntity(asteroid);
     }
 }
