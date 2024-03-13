@@ -4,10 +4,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.asteroidsystem.Asteroid;
-import dk.sdu.mmmi.cbse.playersystem.Player;
-import dk.sdu.mmmi.cbse.enemysystem.Enemy;
-import dk.sdu.mmmi.cbse.common.bullet.Bullet;
+
 
 public class CollisionDetectionSystem implements IEntityProcessingService {
 
@@ -15,49 +12,21 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities()) {
             if (entity.getHealth() != 0) {
-                if (entity instanceof Asteroid) {
+                if (entity.getSize() != 0) {
                     checkCollisions(entity, world);
-                }
-
-                if (entity instanceof Enemy) {
-                    checkCollisions(entity, world);
-                }
-
-                if (entity instanceof Player) {
-                    checkPlayerCollisions((Player) entity, world);
                 }
             }
         }
     }
-
-
 
     private void checkCollisions(Entity entity, World world) {
         for (Entity otherEntity : world.getEntities()) {
-            if (entity.getHealth() == 0 || entity.equals(otherEntity)) {
+            if (otherEntity.getHealth() == 0 || entity.equals(otherEntity)) {
                 continue;
             }
 
-            // Check if the entities have collided using Pythagorean theorem
             if (checkCollision(entity, otherEntity)) {
-                // Handle the collision (destroy the entities, split asteroids, etc.)
-                handleCollision(entity, otherEntity, world);
-            }
-        }
-    }
-
-    private void checkPlayerCollisions(Player player, World world) {
-        // Loop through all entities in the world
-        for (Entity otherEntity : world.getEntities()) {
-            // Skip checking collision with itself
-            if (player.getHealth() == 0 || player.equals(otherEntity)) {
-                continue;
-            }
-
-            // Check if the entities have collided using Pythagorean theorem
-            if (checkCollision(player, otherEntity)) {
-                // Handle the collision (destroy the entities, decrement health, etc.)
-                handlePlayerCollision(player, otherEntity, world);
+                handleCollision(entity, otherEntity);
             }
         }
     }
@@ -74,49 +43,32 @@ public class CollisionDetectionSystem implements IEntityProcessingService {
                 double x2 = polygon2[j] + entity2.getX();
                 double y2 = polygon2[j + 1] + entity2.getY();
 
-                // Adjust the threshold based on your game's requirements
                 if (isPointInsidePolygon(x1, y1, polygon2, entity2) || isPointInsidePolygon(x2, y2, polygon1, entity1)) {
-                    return true; // Collision detected
+                    return true;
                 }
             }
         }
-        return false; // No collision
+        return false;
     }
 
-    private void handleCollision(Entity entity, Entity otherEntity, World world) {
-        if(otherEntity.getHealth() != 0 && !(otherEntity instanceof Bullet)) {
+    private void handleCollision(Entity entity, Entity otherEntity) {
+        if(otherEntity.getColor() != entity.getColor()) {
+            entity.setHealth(entity.getHealth() - 1);
+        }
+        if (otherEntity.getSize() != 0 && otherEntity.getColor() != entity.getColor()) {
             entity.setRotation(calculateRotation(entity, otherEntity));
-            entity.setHealth(entity.getHealth() - 1);
-        } else if (otherEntity instanceof Bullet && otherEntity.getColor() != entity.getColor()){
-            entity.setHealth(entity.getHealth() - 1);
-        }
-    }
-
-    private void handlePlayerCollision(Player player, Entity otherEntity, World world) {
-        if(player.getHealth() != 0 && otherEntity.getColor() != player.getColor() && !(otherEntity instanceof Bullet)) {
-            player.setRotation(calculateRotation(player, otherEntity));
-            player.setHealth(player.getHealth() - 1);
-        }
-        if (otherEntity instanceof Bullet && otherEntity.getColor() != player.getColor()){
-            otherEntity.setHealth(0);
         }
     }
 
     private double calculateRotation(Entity entity1, Entity entity2) {
-        // Calculate the angle between the centers of the two entities
         double angle = Math.atan2(entity2.getY() - entity1.getY(), entity2.getX() - entity1.getX());
 
-        // Calculate the new rotation as the reflection of the current rotation
         double newRotation = 2 * angle - entity1.getRotation();
 
         return newRotation;
     }
 
     private boolean isPointInsidePolygon(double x, double y, double[] polygon, Entity entity) {
-        if (entity.getHealth() == 0) {
-            return false; // Skip checking invalid entities
-        }
-
         int count = 0;
         int numPoints = polygon.length / 2;
 

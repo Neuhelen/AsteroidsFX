@@ -14,10 +14,13 @@ import static java.util.stream.Collectors.toList;
 
 
 public class PlayerControlSystem implements IEntityProcessingService {
+    private int shotCooldown = 10;
     @Override
     public void process(GameData gameData, World world) {
             
-        for (Entity player : world.getEntities(Player.class)) {
+        for (Entity entity : world.getEntities(Player.class)) {
+            Player player = (Player) entity;
+
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 player.setRotation(player.getRotation() - 5);                
             }
@@ -47,11 +50,15 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setY(gameData.getDisplayHeight()-1);
             }
 
-            if (gameData.getKeys().isDown(GameKeys.SPACE)) {
+            if (gameData.getKeys().isDown(GameKeys.SPACE) && player.getLastShotTime() > shotCooldown) {
                 for (BulletSPI bullet : getBulletSPIs()) {
                     world.addEntity(bullet.createBullet(player, gameData));
                 }
+                player.setLastShotTime(0);
+            } else {
+                player.setLastShotTime(player.getLastShotTime() + 1);
             }
+
         }
     }
 

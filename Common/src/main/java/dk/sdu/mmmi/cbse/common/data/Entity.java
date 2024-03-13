@@ -15,6 +15,7 @@ public class Entity implements Serializable {
     private double velocityY;
     private String color;
     private int health = 5;
+    private double size = 1;
 
     public String getID() {
         return ID.toString();
@@ -81,5 +82,13 @@ public class Entity implements Serializable {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public double getSize() {
+        return size;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
     }
 }
