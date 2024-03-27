@@ -35,6 +35,10 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
             if (bullet.getY() > gameData.getDisplayHeight()) {
                 bullet.setHealth(0);
             }
+
+            if (bullet.getHealth() == 0) {
+                bullet.setValid(false);
+            }
         }
     }
 

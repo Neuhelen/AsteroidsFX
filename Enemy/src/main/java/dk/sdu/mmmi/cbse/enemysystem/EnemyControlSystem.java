@@ -31,6 +31,10 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             Enemy enemy = (Enemy) entity;
 
+            if (enemy.getHealth() == 0) {
+                enemy.setValid(false);
+            }
+
             moveRandomly(enemy);
 
             if (enemy.getLastShotTime() >= 50) {
