@@ -20,5 +20,10 @@
             <artifactId>CommonBullet</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>6.1.5</version>
+        </dependency>
     </dependencies>
 </project>

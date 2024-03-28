@@ -24,14 +24,29 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+@Component
 public class Main extends Application {
+    @Autowired
+    private GameData gameData = new GameData();
+    @Autowired
+    private World world = new World();
+    @Autowired
+    private Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
+    @Autowired
+    private Pane gameWindow = new Pane();
 
-    private final GameData gameData = new GameData();
-    private final World world = new World();
-    private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
+    @Autowired
+    private Collection<IGamePluginService> gamePluginServices;
 
-    private final Pane gameWindow = new Pane();
+    @Autowired
+    private Collection<IEntityProcessingService> entityProcessingServices;
+
+    @Autowired
+    private Collection<IPostEntityProcessingService> postEntityProcessingServices;
 
     public static void main(String[] args) {
         launch(Main.class);
@@ -39,6 +54,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.scan("dk.sdu.mmmi.cbse");
+        context.refresh();
+        context.getAutowireCapableBeanFactory().autowireBean(this);
+
         Text text = new Text(10, 20, "Destroyed asteroids: 0");
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameWindow.getChildren().add(text);
@@ -74,7 +94,7 @@ public class Main extends Application {
         });
 
         // Lookup all Game Plugins using ServiceLoader
-        for (IGamePluginService iGamePlugin : getPluginServices()) {
+        for (IGamePluginService iGamePlugin : gamePluginServices) {
             iGamePlugin.start(gameData, world);
         }
         for (Entity entity : world.getEntities()) {
@@ -108,10 +128,10 @@ public class Main extends Application {
     private void update() {
 
         // Update
-        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
+        for (IEntityProcessingService entityProcessorService : entityProcessingServices) {
             entityProcessorService.process(gameData, world);
         }
-        for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
+        for (IPostEntityProcessingService postEntityProcessorService : postEntityProcessingServices) {
             postEntityProcessorService.process(gameData, world);
         }
     }
@@ -140,17 +160,5 @@ public class Main extends Application {
 
             polygon.setFill(Color.valueOf(entity.getColor()));
         }
-    }
-
-    private Collection<? extends IGamePluginService> getPluginServices() {
-        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
-    }
-
-    private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
-    }
-
-    private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
-        return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

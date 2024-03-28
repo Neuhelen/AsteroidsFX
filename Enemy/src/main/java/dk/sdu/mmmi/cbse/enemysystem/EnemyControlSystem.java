@@ -8,9 +8,10 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import java.util.Collection;
 import java.util.Random;
 import java.util.ServiceLoader;
-
 import static java.util.stream.Collectors.toList;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EnemyControlSystem implements IEntityProcessingService {
 
     private Random random = new Random();
