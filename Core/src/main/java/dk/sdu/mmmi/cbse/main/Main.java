@@ -7,14 +7,9 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
-import static java.util.stream.Collectors.toList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -24,20 +19,26 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
-import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
+@ComponentScan("dk.sdu.mmmi.cbse")
 public class Main extends Application {
     @Autowired
-    private GameData gameData = new GameData();
+    private GameData gameData;
+
     @Autowired
-    private World world = new World();
+    private World world;
+
     @Autowired
-    private Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
+    private Map<Entity, Polygon> polygons;
+
     @Autowired
-    private Pane gameWindow = new Pane();
+    private Pane gameWindow;
 
     @Autowired
     private Collection<IGamePluginService> gamePluginServices;
@@ -54,10 +55,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.scan("dk.sdu.mmmi.cbse");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         context.refresh();
-        context.getAutowireCapableBeanFactory().autowireBean(this);
 
         Text text = new Text(10, 20, "Destroyed asteroids: 0");
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
@@ -93,14 +92,8 @@ public class Main extends Application {
             }
         });
 
-        // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : gamePluginServices) {
             iGamePlugin.start(gameData, world);
-        }
-        for (Entity entity : world.getEntities()) {
-            Polygon polygon = new Polygon(entity.getPolygonCoordinates());
-            polygons.put(entity, polygon);
-            gameWindow.getChildren().add(polygon);
         }
 
         render();
@@ -108,7 +101,6 @@ public class Main extends Application {
         window.setScene(scene);
         window.setTitle("ASTEROIDS");
         window.show();
-
     }
 
     private void render() {
@@ -126,8 +118,6 @@ public class Main extends Application {
     }
 
     private void update() {
-
-        // Update
         for (IEntityProcessingService entityProcessorService : entityProcessingServices) {
             entityProcessorService.process(gameData, world);
         }
@@ -139,10 +129,10 @@ public class Main extends Application {
     private void draw() {
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
-            if(!entity.isValid()) {
+            if (!entity.isValid()) {
                 world.removeEntity(entity);
                 gameWindow.getChildren().remove(polygon);
-                if(polygon != null) {
+                if (polygon != null) {
                     polygons.remove(polygon);
                 }
                 continue;
@@ -161,4 +151,25 @@ public class Main extends Application {
             polygon.setFill(Color.valueOf(entity.getColor()));
         }
     }
+
+    @Bean
+    public GameData gameData() {
+        return new GameData();
+    }
+
+    @Bean
+    public World world() {
+        return new World();
+    }
+
+    @Bean
+    public Map<Entity, Polygon> polygons() {
+        return new ConcurrentHashMap<>();
+    }
+
+    @Bean
+    public Pane gameWindow() {
+        return new Pane();
+    }
 }
+
