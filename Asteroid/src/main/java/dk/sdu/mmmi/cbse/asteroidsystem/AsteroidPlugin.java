@@ -20,9 +20,11 @@ public class AsteroidPlugin implements IGamePluginService {
 
     public Entity createAsteroid(GameData gameData) {
         Entity asteroid = new Asteroid();
+        asteroid.setRotation(random.nextDouble(0,360));
         asteroid.setSize(random.nextDouble(10, 50));
         asteroid.setPolygonCoordinates(createShape(asteroid.getSize()));
         asteroid.setColor("GREY");
+        asteroid.setRadius(asteroid.getSize());
 
         int spawnLocation = random.nextInt(4);
 
@@ -70,7 +72,7 @@ public class AsteroidPlugin implements IGamePluginService {
         };
     }
 
-    public void splitAsteroid(GameData gameData, World world, Entity entity) {
+    public void splitAsteroid(Entity entity, World world) {
         Asteroid asteroid = (Asteroid) entity;
         int numberOfSplits = 2;
         double originalSize = asteroid.getSize();
@@ -79,8 +81,9 @@ public class AsteroidPlugin implements IGamePluginService {
         for (int i = 0; i < numberOfSplits; i++) {
             Asteroid smallerAsteroid = new Asteroid();
             smallerAsteroid.setSize(newSize);
-            smallerAsteroid.setPolygonCoordinates(createShape(asteroid.getSize()));
+            smallerAsteroid.setPolygonCoordinates(createShape(smallerAsteroid.getSize()));
             smallerAsteroid.setColor("GREY");
+            smallerAsteroid.setRadius(newSize);
             smallerAsteroid.setX(asteroid.getX() + i * 10 - 5);
             smallerAsteroid.setY(asteroid.getY() + i * 10 - 5);
             smallerAsteroid.setRotation(asteroid.getRotation() + i * 90 - 45);

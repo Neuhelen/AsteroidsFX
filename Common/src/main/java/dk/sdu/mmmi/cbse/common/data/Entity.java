@@ -17,6 +17,7 @@ public class Entity implements Serializable {
     private int health = 5;
     private double size = 1;
     private boolean isValid = true;
+    private double radius = 8;
 
     public String getID() {
         return ID.toString();
@@ -99,5 +100,13 @@ public class Entity implements Serializable {
 
     public void setValid(boolean valid) {
         isValid = valid;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
     }
 }
