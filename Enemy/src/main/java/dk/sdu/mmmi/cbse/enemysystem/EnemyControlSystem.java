@@ -21,7 +21,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        if ((System.nanoTime() - lastEnemySpawn) > 250000L) {
+        if ((System.nanoTime() - lastEnemySpawn) > 2500000000L) {
             Entity enemy = enemyPlugin.createEnemyShip(gameData);
             world.addEntity(enemy);
             lastEnemySpawn = System.nanoTime();

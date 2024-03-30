@@ -15,7 +15,7 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        if (System.nanoTime() - lastAsteroidSpawn > 250000L) {
+        if (System.nanoTime() - lastAsteroidSpawn > 2500000000L) {
             Entity asteroid = asteroidPlugin.createAsteroid(gameData);
             world.addEntity(asteroid);
             lastAsteroidSpawn = System.nanoTime();
