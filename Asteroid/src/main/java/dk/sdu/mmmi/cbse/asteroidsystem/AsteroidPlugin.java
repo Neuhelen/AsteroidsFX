@@ -50,7 +50,7 @@ public class AsteroidPlugin implements IGamePluginService {
                 asteroid.setY(random.nextDouble(0,1) * gameData.getDisplayHeight());
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + random.nextInt(4));
+                throw new IllegalStateException("Unexpected value: " + spawnLocation);
         }
 
         return asteroid;
@@ -75,8 +75,7 @@ public class AsteroidPlugin implements IGamePluginService {
     public void splitAsteroid(Entity entity, World world) {
         Asteroid asteroid = (Asteroid) entity;
         int numberOfSplits = 2;
-        double originalSize = asteroid.getSize();
-        double newSize = originalSize / 2;
+        double newSize = asteroid.getSize() / 2;
 
         for (int i = 0; i < numberOfSplits; i++) {
             Asteroid smallerAsteroid = new Asteroid();
