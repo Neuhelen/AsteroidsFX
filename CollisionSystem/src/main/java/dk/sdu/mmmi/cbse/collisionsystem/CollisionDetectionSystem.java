@@ -20,17 +20,13 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
     }
 
     protected void checkCollisions(Entity entity, World world) {
-        System.out.println("Function is run.");
         for (Entity otherEntity : world.getEntities()) {
-            System.out.println("For-loop is run. ");
             if (otherEntity.getHealth() == 0 || entity.equals(otherEntity) || otherEntity.getColor().equals(entity.getColor())) {
-                System.out.println("Collision doesn't occur.");
                 continue;
             }
 
             if (checkCollision(entity, otherEntity)) {
                 handleCollision(entity, otherEntity);
-                System.out.println("Collision occurs.");
             }
         }
     }
@@ -47,9 +43,7 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
 
         if (otherEntity.getSize() != 0) {
             entity.setRotation(calculateRotation(entity, otherEntity));
-        } else {
-            otherEntity.setHealth(otherEntity.getHealth() - 1);
-        }
+        } 
     }
 
     protected double calculateRotation(Entity entity1, Entity entity2) {
