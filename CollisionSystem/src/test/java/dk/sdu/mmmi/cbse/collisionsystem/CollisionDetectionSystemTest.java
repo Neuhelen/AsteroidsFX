@@ -6,23 +6,22 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CollisionDetectionSystemTest {
     private CollisionDetectionSystem collisionSystem;
-
+    @Mock
     private World world;
-
     Entity entity1 = new Entity();
     Entity entity2 = new Entity();
 
     @org.junit.jupiter.api.BeforeEach
     public void setUp() {
-        //world = Mockito.mock(World.class);
-        world = new World();
+        world = Mockito.mock(World.class);
+        Mockito.when(world.getEntities()).thenReturn(Arrays.asList(entity1, entity2));
         collisionSystem = new CollisionDetectionSystem();
-        entity1 = new Entity();
-        entity2 = new Entity();
         entity1.setX(100);
         entity1.setY(100);
         entity1.setSize(10);
