@@ -11,9 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CollisionDetectionSystemTest {
     private CollisionDetectionSystem collisionSystem;
 
-    @Mock
     private World world;
-
 
     Entity entity1 = new Entity();
     Entity entity2 = new Entity();
@@ -23,6 +21,8 @@ class CollisionDetectionSystemTest {
         //world = Mockito.mock(World.class);
         world = new World();
         collisionSystem = new CollisionDetectionSystem();
+        entity1 = new Entity();
+        entity2 = new Entity();
         entity1.setX(100);
         entity1.setY(100);
         entity1.setSize(10);
@@ -45,7 +45,13 @@ class CollisionDetectionSystemTest {
     public void testCheckCollisions_noCollision() {
         entity2.setX(200);
 
-        collisionSystem.checkCollisions(entity1, world);
+        for (Entity entity : world.getEntities()) {
+            if (entity.getHealth() != 0) {
+                if (entity.getSize() != 0) {
+                    collisionSystem.checkCollisions(entity, world);
+                }
+            }
+        }
 
         assertEquals(5, entity1.getHealth());
         assertEquals(5, entity2.getHealth());
@@ -53,11 +59,13 @@ class CollisionDetectionSystemTest {
 
     @org.junit.jupiter.api.Test
     public void testCheckCollisions_collision() {
-        entity1.setSize(10);
-
-        entity1.setSize(10);
-
-        collisionSystem.checkCollisions(entity1, world);
+        for (Entity entity : world.getEntities()) {
+            if (entity.getHealth() != 0) {
+                if (entity.getSize() != 0) {
+                    collisionSystem.checkCollisions(entity, world);
+                }
+            }
+        }
 
         assertEquals(4, entity1.getHealth());
         assertEquals(4, entity2.getHealth());
