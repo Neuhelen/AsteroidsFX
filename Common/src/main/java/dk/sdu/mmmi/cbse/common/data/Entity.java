@@ -14,10 +14,9 @@ public class Entity implements Serializable {
     private double velocityX = 1;
     private double velocityY = 1;
     private String color;
-    private int health = 5;
-    private double size = 1;
+    private double health = 5;
+    private double size = 0;
     private boolean isValid = true;
-    private double radius = 8;
 
     public String getID() {
         return ID.toString();
@@ -38,8 +37,6 @@ public class Entity implements Serializable {
     public double getX() {
         return x;
     }
-
-    
     public void setY(double y) {
         this.y = y;
     }
@@ -58,7 +55,6 @@ public class Entity implements Serializable {
 
     public void setVelocity(double velocityX, double velocityY) {
         this.velocityX = velocityX;
-
         this.velocityY = velocityY;
     }
 
@@ -78,11 +74,11 @@ public class Entity implements Serializable {
         this.color = color;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
@@ -100,13 +96,5 @@ public class Entity implements Serializable {
 
     public void setValid(boolean valid) {
         isValid = valid;
-    }
-
-    public double getRadius() {
-        return radius;
-    }
-
-    public void setRadius(double radius) {
-        this.radius = radius;
     }
 }

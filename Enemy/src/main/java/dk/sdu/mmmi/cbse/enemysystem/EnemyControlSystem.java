@@ -21,7 +21,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        if ((System.nanoTime() - lastEnemySpawn) > 2500000000L) {
+        if ((System.nanoTime() - lastEnemySpawn) > 3750000000L) {
             Entity enemy = enemyPlugin.createEnemyShip(gameData);
             world.addEntity(enemy);
             lastEnemySpawn = System.nanoTime();
@@ -41,7 +41,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
                 for (BulletSPI bullet : getBulletSPIs()) {
                     world.addEntity(bullet.createBullet(enemy, gameData));
                 }
-
                 enemy.setLastShotTime(0);
             } else {
                 enemy.setLastShotTime(enemy.getLastShotTime() + 1);

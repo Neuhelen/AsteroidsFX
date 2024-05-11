@@ -17,7 +17,6 @@ public class BulletControlSystem implements IEntityProcessingService {
             double bulletDirectionY = Math.sin(Math.toRadians(bullet.getRotation()));
             bullet.setX(bullet.getX() + bulletDirectionX * bullet.getVelocityX());
             bullet.setY(bullet.getY() + bulletDirectionY * bullet.getVelocityY());
-            bullet.setRadius(1);
 
             if (bullet.getX() < 0) {
                 bullet.setHealth(0);
@@ -35,7 +34,7 @@ public class BulletControlSystem implements IEntityProcessingService {
                 bullet.setHealth(0);
             }
 
-            if (bullet.getHealth() == 0) {
+            if (bullet.getHealth() <= 0) {
                 bullet.setValid(false);
             }
         }

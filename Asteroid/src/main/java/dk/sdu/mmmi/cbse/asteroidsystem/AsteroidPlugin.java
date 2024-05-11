@@ -27,7 +27,6 @@ public class AsteroidPlugin implements IGamePluginService {
         asteroid.setSize(random.nextDouble(10, 50));
         asteroid.setPolygonCoordinates(createShape(asteroid.getSize()));
         asteroid.setColor("GREY");
-        asteroid.setRadius(asteroid.getSize());
 
         int spawnLocation = random.nextInt(4);
 
@@ -85,7 +84,6 @@ public class AsteroidPlugin implements IGamePluginService {
             smallerAsteroid.setSize(newSize);
             smallerAsteroid.setPolygonCoordinates(createShape(smallerAsteroid.getSize()));
             smallerAsteroid.setColor("GREY");
-            smallerAsteroid.setRadius(newSize);
             smallerAsteroid.setX(asteroid.getX() + i * 10 - 5);
             smallerAsteroid.setY(asteroid.getY() + i * 10 - 5);
             smallerAsteroid.setRotation(asteroid.getRotation() + i * 90 - 45);

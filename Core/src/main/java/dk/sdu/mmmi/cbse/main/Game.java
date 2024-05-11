@@ -103,8 +103,6 @@ public class Game {
     }
 
     private void update() {
-
-        // Update
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }

@@ -25,7 +25,7 @@ public class EnemyPlugin implements IGamePluginService {
         Entity enemyShip = new Enemy();
         enemyShip.setPolygonCoordinates(-10,-10,20,0,-10,10);
         enemyShip.setColor("RED");
-        enemyShip.setRadius(16);
+        enemyShip.setSize(8);
 
         int spawnLocation = random.nextInt(4);
 

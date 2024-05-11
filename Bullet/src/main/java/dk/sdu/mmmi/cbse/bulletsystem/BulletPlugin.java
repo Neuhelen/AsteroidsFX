@@ -19,7 +19,6 @@ public class BulletPlugin implements IGamePluginService, BulletSPI {
     public Entity createBullet(Entity shooter, GameData gameData) {
         bullet = new Bullet();
         bullet.setHealth(1);
-        bullet.setSize(0);
 
         //This part sets the initial position to the shooter's position.
         bullet.setX(shooter.getX());
@@ -33,8 +32,6 @@ public class BulletPlugin implements IGamePluginService, BulletSPI {
         bullet.setPolygonCoordinates(-2,2,2,2,2,-2,-2,-2);
 
         bullet.setColor(shooter.getColor());
-
-        bullet.setRadius(1);
 
         return bullet;
     }

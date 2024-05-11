@@ -25,12 +25,10 @@ class CollisionDetectionSystemTest {
         entity1.setX(100);
         entity1.setY(100);
         entity1.setSize(10);
-        entity1.setRadius(10);
         entity1.setColor("GREY");
         entity2.setX(100);
         entity2.setY(100);
         entity2.setSize(10);
-        entity2.setRadius(10);
         entity2.setColor("RED");
         world.addEntity(entity1);
         world.addEntity(entity2);
