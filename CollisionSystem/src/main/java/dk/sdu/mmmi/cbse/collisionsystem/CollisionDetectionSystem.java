@@ -35,7 +35,7 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
         }
     }
 
-    public Boolean checkCollision(Entity entity1, Entity entity2) {
+    private boolean checkCollision(Entity entity1, Entity entity2) {
         double differenceX = entity1.getX() - entity2.getX();
         double differenceY = entity1.getY() - entity2.getY();
         double distance = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
