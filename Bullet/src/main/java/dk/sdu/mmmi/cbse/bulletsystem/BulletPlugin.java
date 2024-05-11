@@ -41,9 +41,9 @@ public class BulletPlugin implements IGamePluginService, BulletSPI {
 
     @Override
     public void stop(GameData gameData, World world) {
-        for (Entity e : world.getEntities()) {
-            if (e.getClass() == Bullet.class) {
-                world.removeEntity(e);
+        for (Entity entity : world.getEntities()) {
+            if (entity.getClass() == Bullet.class) {
+                world.removeEntity(entity);
             }
         }
     }
