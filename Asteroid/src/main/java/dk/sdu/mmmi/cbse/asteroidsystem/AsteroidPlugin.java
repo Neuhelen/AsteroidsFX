@@ -10,7 +10,10 @@ import java.util.Random;
 public class AsteroidPlugin implements IGamePluginService {
 
     private Entity asteroid;
-    Random random = new Random();
+    private Random random = new Random();
+
+    public AsteroidPlugin(){
+    }
 
     @Override
     public void start(GameData gameData, World world) {
@@ -56,7 +59,7 @@ public class AsteroidPlugin implements IGamePluginService {
         return asteroid;
     }
 
-    public double[] createShape (double size) {
+    private double[] createShape (double size) {
         Random randSize = new Random();
         double big = randSize.nextDouble((size/2),size);
         double small = randSize.nextDouble(size/2);
@@ -75,7 +78,7 @@ public class AsteroidPlugin implements IGamePluginService {
     public void splitAsteroid(Entity entity, World world) {
         Asteroid asteroid = (Asteroid) entity;
         int numberOfSplits = 2;
-        double newSize = asteroid.getSize() / 2;
+        double newSize = entity.getSize() / 2;
 
         for (int i = 0; i < numberOfSplits; i++) {
             Asteroid smallerAsteroid = new Asteroid();

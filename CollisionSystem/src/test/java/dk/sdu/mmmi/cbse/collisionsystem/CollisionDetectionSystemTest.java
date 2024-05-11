@@ -81,16 +81,4 @@ class CollisionDetectionSystemTest {
         assertEquals(4, entity1.getHealth());
         assertTrue(entity1.getRotation() != 100);
     }
-
-    @org.junit.jupiter.api.Test
-    public void testCalculateRotation() {
-        entity1.setX(0);
-        entity1.setY(0);
-        entity2.setX(10);
-        entity2.setY(10);
-
-        double rotation = collisionSystem.calculateRotation(entity1, entity2);
-
-        assertEquals(Math.PI/2, rotation, 0.0001);
-    }
 }

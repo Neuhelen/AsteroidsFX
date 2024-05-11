@@ -15,7 +15,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     private Random random = new Random();
 
-    EnemyPlugin enemyPlugin = new EnemyPlugin();
+    private EnemyPlugin enemyPlugin = new EnemyPlugin();
     private long lastEnemySpawn = System.nanoTime();
 
 

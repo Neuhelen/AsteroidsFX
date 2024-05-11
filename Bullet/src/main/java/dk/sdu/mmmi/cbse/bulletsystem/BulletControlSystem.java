@@ -7,9 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
-public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
-
-
+public class BulletControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
 
@@ -41,27 +39,5 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
                 bullet.setValid(false);
             }
         }
-    }
-
-    @Override
-    public Entity createBullet(Entity shooter, GameData gameData) {
-        Entity bullet = new Bullet();
-        bullet.setHealth(1);
-        bullet.setSize(0);
-
-        //This part sets the initial position to the shooter's position.
-        bullet.setX(shooter.getX());
-        bullet.setY(shooter.getY());
-
-        //This part sets the initial rotation to the shooter's rotation.
-        bullet.setRotation(shooter.getRotation());
-
-        bullet.setVelocity(shooter.getVelocityX() * 1.5, shooter.getVelocityY() * 1.5);
-
-        bullet.setPolygonCoordinates(-2,2,2,2,2,-2,-2,-2);
-
-        bullet.setColor(shooter.getColor());
-
-        return bullet;
     }
 }

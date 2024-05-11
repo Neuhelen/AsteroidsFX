@@ -10,7 +10,10 @@ import java.util.Random;
 public class EnemyPlugin implements IGamePluginService {
 
     private Entity enemy;
-    Random random = new Random();
+    private Random random = new Random();
+
+    public EnemyPlugin(){
+    }
 
     @Override
     public void start(GameData gameData, World world) {

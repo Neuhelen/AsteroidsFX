@@ -5,14 +5,18 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
+import java.util.Random;
+
 
 public class CollisionDetectionSystem implements IPostEntityProcessingService {
+
+    private Random random = new Random();
 
     @Override
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities()) {
             if (entity.getHealth() != 0) {
-                if (entity.getSize() != 0) {
+                if (entity.getRadius() != 0) {
                     checkCollisions(entity, world);
                 }
             }
@@ -32,9 +36,9 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
     }
 
     public Boolean checkCollision(Entity entity1, Entity entity2) {
-        float dx = (float) entity1.getX() - (float) entity2.getX();
-        float dy = (float) entity1.getY() - (float) entity2.getY();
-        float distance = (float) Math.sqrt(dx * dx + dy * dy);
+        double differenceX = entity1.getX() - entity2.getX();
+        double differenceY = entity1.getY() - entity2.getY();
+        double distance = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
         return distance < (entity1.getRadius() + entity2.getRadius());
     }
 
@@ -42,13 +46,7 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
         entity.setHealth(entity.getHealth() - 1);
 
         if (otherEntity.getSize() != 0) {
-            entity.setRotation(calculateRotation(entity, otherEntity));
+            entity.setRotation(entity.getRotation() + random.nextInt(46) + 45);
         } 
-    }
-
-    protected double calculateRotation(Entity entity1, Entity entity2) {
-        double angle = Math.atan2(entity2.getY() - entity1.getY(), entity2.getX() - entity1.getX());
-
-        return 2 * angle - entity1.getRotation();
     }
 }

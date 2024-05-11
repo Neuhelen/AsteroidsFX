@@ -10,7 +10,7 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
     private Random random = new Random();
 
-    AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
+    private AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
     private long lastAsteroidSpawn = System.nanoTime();
 
     @Override
@@ -23,8 +23,10 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
         for (Entity asteroid : world.getEntities(Asteroid.class)) {
 
-            if (asteroid.getHealth() == 0 && asteroid.getSize() > 20) {
+            if (asteroid.getHealth() <= 0 && asteroid.getSize() > 30) {
                 asteroidPlugin.splitAsteroid(asteroid, world);
+                asteroid.setValid(false);
+            } else if (asteroid.getHealth() <= 0) {
                 asteroid.setValid(false);
             }
 
