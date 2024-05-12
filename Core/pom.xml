@@ -78,6 +78,12 @@
             <artifactId>spring-expression</artifactId>
             <version>6.1.5</version>
         </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>SplitPackage</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
               <plugins>
