@@ -18,7 +18,7 @@ public class BulletPlugin implements IGamePluginService, BulletSPI {
     @Override
     public Entity createBullet(Entity shooter, GameData gameData) {
         bullet = new Bullet();
-        bullet.setHealth(1);
+        bullet.setHealth(0.5);
 
         //This part sets the initial position to the shooter's position.
         bullet.setX(shooter.getX());
