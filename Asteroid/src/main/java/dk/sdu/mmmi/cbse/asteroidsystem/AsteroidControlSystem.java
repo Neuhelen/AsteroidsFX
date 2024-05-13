@@ -4,13 +4,12 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.commonscore.IScoreSystem;
 
-import java.util.Collection;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Random;
-import java.util.ServiceLoader;
 
-import static java.util.stream.Collectors.toList;
 
 public class AsteroidControlSystem implements IEntityProcessingService {
 
@@ -33,14 +32,10 @@ public class AsteroidControlSystem implements IEntityProcessingService {
             if (asteroid.getHealth() <= 0 && asteroid.getSize() > 30) {
                 asteroidPlugin.splitAsteroid(asteroid, world);
                 asteroid.setValid(false);
-                for (IScoreSystem scoreSystem : getScoreSystems()) {
-                    scoreSystem.addToScore(1);
-                }
+                sendScoreUpdate(1);
             } else if (asteroid.getHealth() <= 0) {
                 asteroid.setValid(false);
-                for (IScoreSystem scoreSystem : getScoreSystems()) {
-                    scoreSystem.addToScore(2);
-                }
+                sendScoreUpdate(2);
             }
 
             move(asteroid);
@@ -73,8 +68,16 @@ public class AsteroidControlSystem implements IEntityProcessingService {
         asteroid.setX(asteroid.getX() + changeX);
         asteroid.setY(asteroid.getY() + changeY);
     }
-    
-    private Collection<? extends IScoreSystem> getScoreSystems() {
-        return ServiceLoader.load(IScoreSystem.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+
+    private void sendScoreUpdate(int points) {
+        try {
+            URL url = new URL("http://localhost:8080/score?point=" + points);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            connection.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

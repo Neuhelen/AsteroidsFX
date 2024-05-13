@@ -7,6 +7,12 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +35,7 @@ public class Game {
     private final Collection<? extends IGamePluginService> gamePluginServices;
     private final Collection<? extends IEntityProcessingService> entityProcessingServiceList;
     private final Collection<? extends IPostEntityProcessingService> postEntityProcessingServices;
+    Text text;
 
     Game (Collection<? extends IGamePluginService> gamePluginServices, Collection<? extends IEntityProcessingService> entityProcessingServiceList, Collection<? extends IPostEntityProcessingService> postEntityProcessingServices) {
         this.gamePluginServices = gamePluginServices;
@@ -39,7 +46,8 @@ public class Game {
     public void start(Stage window) throws Exception {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
 
-        Text text = new Text(10, 20, "Destroyed asteroids: 0");
+        text = new Text(10, 20, "Destroyed asteroids: 0");
+
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameWindow.getChildren().add(text);
 
@@ -109,6 +117,7 @@ public class Game {
         for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
             postEntityProcessorService.process(gameData, world);
         }
+        updateScore();
     }
 
     private void draw() {
@@ -147,6 +156,31 @@ public class Game {
 
     public Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
         return postEntityProcessingServices;
+    }
+    private void updateScore() {
+        try {
+            URL url = new URL("http://localhost:8080/score?points=1"); // Assuming 1 point for each update
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            if (connection.getResponseCode() == 200) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+
+                String inputLine;
+                while ((inputLine = bufferedReader.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                bufferedReader.close();
+
+                // Update the text with the received score
+                text.setText("Destroyed asteroids: " + response);
+            }
+            connection.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle exception appropriately
+        }
     }
 }
 
