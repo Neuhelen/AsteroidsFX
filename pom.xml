@@ -19,6 +19,8 @@
         <module>Player</module>
         <module>Bullet</module>
         <module>CommonBullet</module>
+        <module>ScoreSystem</module>
+        <module>CommonScore</module>
     </modules>
     <properties>
         <java>java</java>

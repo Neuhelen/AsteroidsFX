@@ -4,7 +4,13 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.commonscore.IScoreSystem;
+
+import java.util.Collection;
 import java.util.Random;
+import java.util.ServiceLoader;
+
+import static java.util.stream.Collectors.toList;
 
 public class AsteroidControlSystem implements IEntityProcessingService {
 
@@ -12,6 +18,7 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
     private AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
     private long lastAsteroidSpawn = System.nanoTime();
+
 
     @Override
     public void process(GameData gameData, World world) {
@@ -26,8 +33,14 @@ public class AsteroidControlSystem implements IEntityProcessingService {
             if (asteroid.getHealth() <= 0 && asteroid.getSize() > 30) {
                 asteroidPlugin.splitAsteroid(asteroid, world);
                 asteroid.setValid(false);
+                for (IScoreSystem scoreSystem : getScoreSystems()) {
+                    scoreSystem.addToScore(1);
+                }
             } else if (asteroid.getHealth() <= 0) {
                 asteroid.setValid(false);
+                for (IScoreSystem scoreSystem : getScoreSystems()) {
+                    scoreSystem.addToScore(2);
+                }
             }
 
             move(asteroid);
@@ -59,5 +72,9 @@ public class AsteroidControlSystem implements IEntityProcessingService {
         double changeY = Math.sin(Math.toRadians(asteroid.getRotation()));
         asteroid.setX(asteroid.getX() + changeX);
         asteroid.setY(asteroid.getY() + changeY);
+    }
+    
+    private Collection<? extends IScoreSystem> getScoreSystems() {
+        return ServiceLoader.load(IScoreSystem.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }
