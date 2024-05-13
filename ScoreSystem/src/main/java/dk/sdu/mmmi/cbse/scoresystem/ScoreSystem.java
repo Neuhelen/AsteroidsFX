@@ -3,6 +3,7 @@ package dk.sdu.mmmi.cbse.scoresystem;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,9 +16,13 @@ public class ScoreSystem {
         SpringApplication.run(ScoreSystem.class, args);
     }
 
-    @GetMapping("/score")
+    @PostMapping("/addToScore")
     public int addToScore(@RequestParam(value = "points") int points) {
         score += points;
+        return score;
+    }
+    @GetMapping("/score")
+    public int addToScore() {
         return score;
     }
 }

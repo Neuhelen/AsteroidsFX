@@ -159,7 +159,7 @@ public class Game {
     }
     private void updateScore() {
         try {
-            URL url = new URL("http://localhost:8080/score?points=1"); // Assuming 1 point for each update
+            URL url = new URL("http://localhost:8080/score"); // Assuming 1 point for each update
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 

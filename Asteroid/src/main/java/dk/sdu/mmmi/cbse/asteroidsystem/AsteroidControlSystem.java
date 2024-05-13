@@ -71,9 +71,12 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
     private void sendScoreUpdate(int points) {
         try {
-            URL url = new URL("http://localhost:8080/score?point=" + points);
+            URL url = new URL("http://localhost:8080/addToScore?points=" + points);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod("POST");
+            if(connection.getResponseCode() != 200) {
+                System.out.println(connection.getResponseCode());
+            }
 
             connection.disconnect();
         } catch (IOException e) {
