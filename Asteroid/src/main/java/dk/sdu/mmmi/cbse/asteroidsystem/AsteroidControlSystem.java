@@ -80,7 +80,7 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
             connection.disconnect();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("No connection found.");
         }
     }
 }
