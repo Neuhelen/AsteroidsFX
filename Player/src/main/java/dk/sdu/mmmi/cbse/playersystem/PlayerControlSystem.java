@@ -19,8 +19,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
             
-        for (Entity entity : world.getEntities(Player.class)) {
-            Player player = (Player) entity;
+        for (Entity player : world.getEntities(Player.class)) {
 
             if (player.getHealth() == 0) {
                 player.setValid(false);
