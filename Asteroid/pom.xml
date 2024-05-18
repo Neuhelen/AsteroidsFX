@@ -16,11 +16,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>CommonBullet</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>dk.sdu.mmmi.cbse</groupId>
             <artifactId>SplitPackage</artifactId>
             <version>1.0.1-SNAPSHOT</version>
