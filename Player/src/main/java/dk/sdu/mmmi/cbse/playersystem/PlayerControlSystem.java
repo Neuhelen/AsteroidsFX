@@ -14,6 +14,8 @@ import static java.util.stream.Collectors.toList;
 
 
 public class PlayerControlSystem implements IEntityProcessingService {
+    private int lastShotTime = 0;
+
     @Override
     public void process(GameData gameData, World world) {
             
@@ -53,13 +55,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setY(gameData.getDisplayHeight()-1);
             }
 
-            if (gameData.getKeys().isDown(GameKeys.SPACE) && player.getLastShotTime() > 10) {
+            if (gameData.getKeys().isDown(GameKeys.SPACE) && lastShotTime > 10) {
                 for (BulletSPI bullet : getBulletSPIs()) {
                     world.addEntity(bullet.createBullet(player, gameData));
                 }
-                player.setLastShotTime(0);
+                lastShotTime = 0;
             } else {
-                player.setLastShotTime(player.getLastShotTime() + 1);
+                lastShotTime += 1;
             }
         }
     }
