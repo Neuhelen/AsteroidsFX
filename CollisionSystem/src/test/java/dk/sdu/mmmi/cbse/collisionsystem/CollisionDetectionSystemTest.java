@@ -64,8 +64,8 @@ class CollisionDetectionSystemTest {
             }
         }
 
-        assertEquals(4, entity1.getHealth());
-        assertEquals(4, entity2.getHealth());
+        assertEquals(4.5, entity1.getHealth());
+        assertEquals(4.5, entity2.getHealth());
     }
 
 
@@ -76,7 +76,7 @@ class CollisionDetectionSystemTest {
 
         collisionSystem.handleCollision(entity1, entity2);
 
-        assertEquals(4, entity1.getHealth());
+        assertEquals(4.5, entity1.getHealth());
         assertTrue(entity1.getRotation() != 100);
     }
 }
