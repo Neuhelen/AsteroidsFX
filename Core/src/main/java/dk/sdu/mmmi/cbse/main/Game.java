@@ -157,9 +157,10 @@ public class Game {
     public Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
         return postEntityProcessingServices;
     }
+
     private void updateScore() {
         try {
-            URL url = new URL("http://localhost:8080/score"); // Assuming 1 point for each update
+            URL url = new URL("http://localhost:8080/score");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
@@ -173,13 +174,11 @@ public class Game {
                 }
                 bufferedReader.close();
 
-                // Update the text with the received score
                 text.setText("Destroyed asteroids: " + response);
             }
             connection.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle exception appropriately
         }
     }
 }

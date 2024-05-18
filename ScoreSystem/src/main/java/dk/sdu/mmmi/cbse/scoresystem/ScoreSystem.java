@@ -22,7 +22,7 @@ public class ScoreSystem {
         return score;
     }
     @GetMapping("/score")
-    public int addToScore() {
+    public int getScore() {
         return score;
     }
 }
